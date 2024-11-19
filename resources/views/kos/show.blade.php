@@ -1,13 +1,7 @@
 <!-- resources/views/kosan/show.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Kosan</title>
-</head>
-<body>
-    @include('layouts.navbar')
+@extends('layouts.app')
+
+@section('content')
     <h1>Detail Kosan: {{ $kosan->nama_kosan }}</h1>
     <p>Alamat: {{ $kosan->alamat_kosan }}</p>
     <p>Harga: Rp{{ number_format($kosan->harga_kosan) }}</p>
@@ -36,5 +30,4 @@
             <button type="submit">Lakukan Transaksi</button>
         </form>
     @endauth
-</body>
-</html>
+@endsection

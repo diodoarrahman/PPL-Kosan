@@ -1,4 +1,7 @@
 <!-- resources/views/transaction/index.blade.php -->
+@extends('layouts.app')
+
+@section('content')
 <h1>Riwayat Transaksi</h1>
 <ul>
     @foreach ($transactions as $transaction)
@@ -10,3 +13,4 @@
         </li>
     @endforeach
 </ul>
+@endsection

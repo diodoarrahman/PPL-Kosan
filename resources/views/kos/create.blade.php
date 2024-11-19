@@ -1,13 +1,6 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Kosan</title>
-</head>
-<body>
-    @include('layouts.navbar')
+@section('content')
     <h1>Tambah Kosan Baru</h1>
     {{ auth()->user()->name }}
     <form action="{{ route('kosan.store') }}" method="POST" enctype="multipart/form-data">
@@ -39,5 +32,5 @@
 
         <button type="submit">Simpan Kosan</button>
     </form>
-</body>
-</html>
+@endsection
+

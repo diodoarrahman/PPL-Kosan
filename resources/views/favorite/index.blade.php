@@ -1,4 +1,7 @@
 <!-- resources/views/favorite/index.blade.php -->
+@extends('layouts.app')
+
+@section('content')
 <h1>Daftar Favorit</h1>
 <ul>
     @foreach ($favorites as $favorite)
@@ -7,3 +10,4 @@
         </li>
     @endforeach
 </ul>
+@endsection
