@@ -1,45 +1,68 @@
-<!-- resources/views/kosan/edit.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Kosan</title>
-</head>
-<body>
-    @include('layouts.navbar')
-    <h1>Edit Kosan: {{ $kosan->nama_kosan }}</h1>
+@extends('layouts.app')
 
-    <form action="{{ route('kosan.update', $kosan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+@section('content')
+    <div class="container mt-5 mx-auto">
+        <h1 class="mb-4">Edit Kosan: {{ $kosan->nama_kosan }}</h1>
 
-        <label for="nama_kosan">Nama Kosan:</label>
-        <input type="text" name="nama_kosan" value="{{ $kosan->nama_kosan }}" required><br>
+        <form action="{{ route('kosan.update', $kosan->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-        <label for="alamat_kosan">Alamat:</label>
-        <input type="text" name="alamat_kosan" value="{{ $kosan->alamat_kosan }}" required><br>
+            <div class="mb-3">
+                <label for="nama_kosan" class="form-label">Nama Kosan:</label>
+                <input type="text" class="form-control" name="nama_kosan" value="{{ $kosan->nama_kosan }}" required>
+            </div>
 
-        <label for="harga_kosan">Harga:</label>
-        <input type="number" name="harga_kosan" value="{{ $kosan->harga_kosan }}" required><br>
+            <div class="mb-3">
+                <label for="alamat_kosan" class="form-label">Alamat:</label>
+                <input type="text" class="form-control" name="alamat_kosan" value="{{ $kosan->alamat_kosan }}" required>
+            </div>
 
-        <label for="kamar_tersedia">Kamar Tersedia:</label>
-        <input type="number" name="kamar_tersedia" value="{{ $kosan->kamar_tersedia }}" required><br>
+            <div class="mb-3">
+                <label for="harga_kosan" class="form-label">Harga:</label>
+                <input type="number" class="form-control" name="harga_kosan" value="{{ $kosan->harga_kosan }}" required>
+            </div>
 
-        <label for="jenis_kosan">Jenis Kosan:</label>
-        <select name="jenis_kosan" required>
-            <option value="Putra" {{ $kosan->jenis_kosan == 'Putra' ? 'selected' : '' }}>Putra</option>
-            <option value="Putri" {{ $kosan->jenis_kosan == 'Putri' ? 'selected' : '' }}>Putri</option>
-            <option value="Campur" {{ $kosan->jenis_kosan == 'Campur' ? 'selected' : '' }}>Campur</option>
-        </select><br>
+            <div class="mb-3">
+                <label for="kamar_tersedia" class="form-label">Kamar Tersedia:</label>
+                <input type="number" class="form-control" name="kamar_tersedia" value="{{ $kosan->kamar_tersedia }}"
+                    required>
+            </div>
 
-        <label for="deskripsi_kosan">Deskripsi:</label>
-        <textarea name="deskripsi_kosan" required>{{ $kosan->deskripsi_kosan }}</textarea><br>
+            <div class="mb-3">
+                <label for="jenis_kosan" class="form-label">Jenis Kosan:</label>
+                <select name="jenis_kosan" class="form-select" required>
+                    <option value="Putra" {{ $kosan->jenis_kosan == 'Putra' ? 'selected' : '' }}>Putra</option>
+                    <option value="Putri" {{ $kosan->jenis_kosan == 'Putri' ? 'selected' : '' }}>Putri</option>
+                    <option value="Campur" {{ $kosan->jenis_kosan == 'Campur' ? 'selected' : '' }}>Campur</option>
+                </select>
+            </div>
 
-        <label for="photos">Tambahkan Foto Baru:</label>
-        <input type="file" name="photos[]" multiple><br>
+            <div class="mb-3">
+                <label for="deskripsi_kosan" class="form-label">Deskripsi:</label>
+                <textarea class="form-control" name="deskripsi_kosan" rows="4" required>{{ $kosan->deskripsi_kosan }}</textarea>
+            </div>
 
-        <button type="submit">Simpan Perubahan</button>
-    </form>
-</body>
-</html>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <!-- Menampilkan gambar kosan -->
+                        <img src="{{ $kosan->photos->first() ? asset('storage/' . $kosan->photos->first()->photo_url) : asset('images/default-kosan.jpg') }}"
+                            class="card-img-top" alt="Foto Kosan" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $kosan->nama_kosan }}</h5>
+                            <p class="card-text">
+                                <label for="photos" class="form-label">Tambahkan Foto Baru:</label>
+                    <input type="file" class="form-control" id="photos" name="photos[]" multiple>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+
+            
+        </form>
+    </div>
+@endsection

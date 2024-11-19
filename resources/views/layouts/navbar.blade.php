@@ -7,11 +7,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kos-Kosan</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" />
-
+    <style>
+        .navbar-custom {
+            background-color: #2C6E49; /* Hijau tua */
+        }
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-brand {
+            color: #F3EAC2 !important; /* Krem cerah */
+        }
+        .navbar-custom .dropdown-menu {
+            background-color: #F3EAC2; /* Krem cerah */
+        }
+        .navbar-custom .dropdown-item {
+            color: #2C6E49 !important; /* Hijau tua */
+        }
+        .navbar-custom .dropdown-item:hover {
+            background-color: #A7C957 !important; /* Hijau muda */
+        }
+    </style>
 </head>
 <body>
-    <!-- Tempat Navbar akan ditaruh -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('mainpage') }}">Kos-Kosan</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +35,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <!-- Menu Favorit dan Transaksi untuk pengguna yang login -->
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('favorite.index') }}">Favorit</a>
@@ -38,14 +53,13 @@
                     @endguest
                 </ul>
                 <ul class="navbar-nav ms-auto">
-                    <!-- Dropdown Profile Menu -->
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Profil
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Atur Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Atur Profil</a></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
                                         @csrf
@@ -54,26 +68,20 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Dashboard Menu -->
                         @if(Auth::user()->role === 'owner' || Auth::user()->role === 'admin')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route(Auth::user()->role . '.dashboard') }}">Dashboard</a>
                             </li>
-                        @endif
-                        <!-- Manajemen Kosan -->
-                        @if(Auth::user()->role === 'owner' || Auth::user()->role === 'admin')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('kosan.manage') }}">Manajemen Kosan</a>
                             </li>
                         @endif
-                        <!-- Manajemen Pengguna untuk Admin -->
                         @if(Auth::user()->role === 'admin')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('user.manage') }}">Manajemen Pengguna</a>
                             </li>
                         @endif
                     @else
-                        <!-- Menu Login dan Register untuk Guest -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">Login</a>
                         </li>
@@ -86,7 +94,6 @@
         </div>
     </nav>
 
-    {{-- <script src="{{"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"}}"></script> --}}
-    <script src="{{asset('js/bootstrap.bundle.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.min.bundle.js') }}"></script>
 </body>
 </html>
