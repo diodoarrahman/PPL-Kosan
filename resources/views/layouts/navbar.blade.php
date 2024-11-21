@@ -45,21 +45,33 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    @if (Auth::user()->role === 'owner' || Auth::user()->role === 'admin')
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route(Auth::user()->role . '.dashboard') }}">Dashboard</a>
+                    @auth
+                        @if (Auth::user()->role === 'owner' || Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route(Auth::user()->role . '.dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Manajemen
+                                </a>
+                        @endif
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (Auth::user()->role === 'owner' || Auth::user()->role === 'admin')
+                                <li><a class="dropdown-item" href="{{ route('kosan.manage') }}">Manajemen Kosan</a></li>
+                            @endif
+                            @if (Auth::user()->role === 'admin')
+                                <li><a class="dropdown-item" href="{{ route('user.manage') }}">Manajemen Pengguna</a></li>
+                            @endif
+                        </ul>
+
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('kosan.manage') }}">Manajemen Kosan</a>
-                        </li>
-                    @endif
-                    @if (Auth::user()->role === 'admin')
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user.manage') }}">Manajemen Pengguna</a>
-                        </li>
-                    @endif
+                    @endauth
+
+
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('favorite.index') }}">Favorit</a>
@@ -81,7 +93,7 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     @auth
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropstart">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Profil
