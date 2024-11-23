@@ -9,8 +9,15 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" />
     <style>
         body {
-            background-color: #F3EAC2; /* Latar belakang krem */
-            color: #2C6E49 !important; /* Teks utama hijau tua */
+            background-color: #F3EAC2;
+            color: #2C6E49 !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 80px; /* Sesuaikan dengan tinggi navbar */
+            margin-bottom: 60px; /* Sesuaikan dengan tinggi footer */
         }
     </style>
 </head>
@@ -19,8 +26,8 @@
     <!-- Navbar -->
     @include('layouts.navbar')
 
-    <!-- Konten Utama -->
-    <div class="container mt-5">
+    <!-- Main Content -->
+    <div class="container">
         @yield('content')
     </div>
 

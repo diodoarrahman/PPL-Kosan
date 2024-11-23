@@ -1,36 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Tambah Kosan Baru</h1>
-    {{ auth()->user()->name }}
-    <form action="{{ route('kosan.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="nama_kosan">Nama Kosan:</label>
-        <input type="text" name="nama_kosan" required><br>
+    <div class="container mt-5 mx-auto">
+        <h1 class="mb-4">Tambah Kosan Baru</h1>
 
-        <label for="alamat_kosan">Alamat:</label>
-        <input type="text" name="alamat_kosan" required><br>
+        <form action="{{ route('kosan.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-        <label for="harga_kosan">Harga:</label>
-        <input type="number" name="harga_kosan" required><br>
+            <div class="mb-3">
+                <label for="nama_kosan" class="form-label">Nama Kosan:</label>
+                <input type="text" class="form-control" name="nama_kosan" required>
+            </div>
 
-        <label for="kamar_tersedia">Kamar Tersedia:</label>
-        <input type="number" name="kamar_tersedia" required><br>
+            <div class="mb-3">
+                <label for="alamat_kosan" class="form-label">Alamat:</label>
+                <input type="text" class="form-control" name="alamat_kosan" required>
+            </div>
 
-        <label for="jenis_kosan">Jenis Kosan:</label>
-        <select name="jenis_kosan" required>
-            <option value="Putra">Putra</option>
-            <option value="Putri">Putri</option>
-            <option value="Campur">Campur</option>
-        </select><br>
+            <div class="mb-3">
+                <label for="harga_kosan" class="form-label">Harga:</label>
+                <input type="number" class="form-control" name="harga_kosan" required>
+            </div>
 
-        <label for="deskripsi_kosan">Deskripsi:</label>
-        <textarea name="deskripsi_kosan" required></textarea><br>
+            <div class="mb-3">
+                <label for="kamar_tersedia" class="form-label">Kamar Tersedia:</label>
+                <input type="number" class="form-control" name="kamar_tersedia" required>
+            </div>
 
-        <label for="photos">Foto Kosan:</label>
-        <input type="file" name="photos[]" multiple><br>
+            <div class="mb-3">
+                <label for="jenis_kosan" class="form-label">Jenis Kosan:</label>
+                <select name="jenis_kosan" class="form-select" required>
+                    <option value="Putra">Putra</option>
+                    <option value="Putri">Putri</option>
+                    <option value="Campur">Campur</option>
+                </select>
+            </div>
 
-        <button type="submit">Simpan Kosan</button>
-    </form>
+            <div class="mb-3">
+                <label for="deskripsi_kosan" class="form-label">Deskripsi:</label>
+                <textarea class="form-control" name="deskripsi_kosan" rows="4" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="photos" class="form-label">Foto Kosan:</label>
+                <input type="file" class="form-control" name="photos[]" multiple>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Simpan Kosan</button>
+            </div>
+        </form>
+    </div>
 @endsection
-

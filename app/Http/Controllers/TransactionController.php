@@ -13,6 +13,8 @@ class TransactionController extends Controller
         return view('transaction.index', compact('transactions'));
     }
 
+    
+
     public function store(Request $request)
     {
         $request->validate([

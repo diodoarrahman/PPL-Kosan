@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/navbar.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,34 +10,29 @@
     <style>
         .navbar-custom {
             background-color: #2C6E49;
-            /* Hijau tua */
         }
 
         .navbar-custom .nav-link,
         .navbar-custom .navbar-brand {
             color: #F3EAC2 !important;
-            /* Krem cerah */
         }
 
         .navbar-custom .dropdown-menu {
             background-color: #F3EAC2;
-            /* Krem cerah */
         }
 
         .navbar-custom .dropdown-item {
             color: #2C6E49 !important;
-            /* Hijau tua */
         }
 
         .navbar-custom .dropdown-item:hover {
             background-color: #A7C957 !important;
-            /* Hijau muda */
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('mainpage') }}">Kos-Kosan</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -70,7 +64,6 @@
 
                         </li>
                     @endauth
-
 
                     @auth
                         <li class="nav-item">

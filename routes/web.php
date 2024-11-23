@@ -43,11 +43,11 @@ Route::delete('/kosan/{id}', [KosController::class, 'destroy'])->name('kosan.des
 // Favorite routes
 Route::get('/favorite', [FavoriteController::class, 'index'])->name('favorite.index');
 Route::post('/favorite/add', [FavoriteController::class, 'store'])->name('favorite.store');
+Route::delete('/favorite/{id}', [FavoriteController::class, 'destroy'])->name('favorite.destroy');
 
 // Transaction routes
 Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
 Route::post('/transaction/create', [TransactionController::class, 'store'])->name('transaction.store');
-
 // Tambahkan di web.php
 Route::get('/profile/edit', function () {
     return view('profile.edit');
