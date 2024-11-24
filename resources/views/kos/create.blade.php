@@ -41,9 +41,9 @@
                 <textarea class="form-control" name="deskripsi_kosan" rows="4" required></textarea>
             </div>
 
-            <div class="mb-3">
-                <label for="photos" class="form-label">Foto Kosan:</label>
-                <input type="file" class="form-control" name="photos[]" multiple>
+            <div class="form-group">
+                <label for="photos">Upload Foto Kosan</label>
+                <input type="file" name="photos[]" multiple class="form-control" id="photos">
             </div>
 
             <div class="d-flex justify-content-end">

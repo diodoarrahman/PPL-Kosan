@@ -9,9 +9,27 @@
             @foreach ($kosans as $k)
                 <div class="col-md-4 mb-3">
                     <div class="card h-100">
-                        <!-- Menampilkan gambar kosan -->
-                        <img src="{{ $k->photos->first() ? asset('storage/' . $k->photos->first()->photo_url) : asset('images/default-kosan.jpg') }}"
-                            class="card-img-top" alt="Foto Kosan" style="height: 200px; object-fit: cover;">
+                        <!-- Menambahkan carousel untuk gambar kosan -->
+                        <div id="carouselExampleControls{{ $k->id }}" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach ($k->photos as $index => $photo)
+                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                        <img class="d-block w-100" src="{{ asset('storage/' . $photo->photo_url) }}"
+                                            alt="Foto Kosan">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls{{ $k->id }}"
+                                role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls{{ $k->id }}"
+                                role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $k->nama_kosan }}</h5>
                             <p class="card-text">
