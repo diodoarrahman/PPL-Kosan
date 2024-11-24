@@ -7,6 +7,8 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,4 +73,6 @@ Route::get('/test-route', function () {
     return "This is a test route.";
 });
 // Route::get('/kosan/manage-test', [KosanController::class, 'manage']);
+
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 

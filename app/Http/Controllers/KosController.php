@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kosan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class KosController extends Controller
 {
@@ -32,23 +33,16 @@ class KosController extends Controller
     {
         $request->validate([
             'nama_kosan' => 'required|string|max:255',
-            'alamat_kosan' => 'required|string',
-            'harga_kosan' => 'required|integer',
+            'alamat_kosan' => 'required|string|max:255',
+            'harga_kosan' => 'required|numeric',
             'kamar_tersedia' => 'required|integer',
-            'jenis_kosan' => 'required|in:Putra,Putri,Campur',
+            'jenis_kosan' => 'required|string',
             'deskripsi_kosan' => 'required|string',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'no_handphone' => 'nullable|string|max:15',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $kosan = Kosan::create([
-            'nama_kosan' => $request->nama_kosan,
-            'alamat_kosan' => $request->alamat_kosan,
-            'harga_kosan' => $request->harga_kosan,
-            'kamar_tersedia' => $request->kamar_tersedia,
-            'jenis_kosan' => $request->jenis_kosan,
-            'deskripsi_kosan' => $request->deskripsi_kosan,
-            'user_id' => auth()->user()->id,
-        ]);
+        $kosan = Kosan::create($request->only(['nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan', 'no_handphone']) + ['user_id' => Auth::id()]);
 
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
@@ -70,18 +64,17 @@ class KosController extends Controller
     {
         $request->validate([
             'nama_kosan' => 'required|string|max:255',
-            'alamat_kosan' => 'required|string',
-            'harga_kosan' => 'required|integer',
+            'alamat_kosan' => 'required|string|max:255',
+            'harga_kosan' => 'required|numeric',
             'kamar_tersedia' => 'required|integer',
-            'jenis_kosan' => 'required|in:Putra,Putri,Campur',
+            'jenis_kosan' => 'required|string',
             'deskripsi_kosan' => 'required|string',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'no_handphone' => 'nullable|string|max:15',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $kosan = Kosan::findOrFail($id);
-        $kosan->update($request->only([
-            'nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan'
-        ]));
+        $kosan->update($request->only(['nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan', 'no_handphone']));
 
         if ($request->hasFile('photos')) {
             foreach ($kosan->photos as $photo) {

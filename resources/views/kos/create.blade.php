@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-5 mx-auto">
-        <h1 class="mb-4">Tambah Kosan Baru</h1>
+    <div class="container mt-5">
+        <h1>Buat Kosan Baru</h1>
 
         <form action="{{ route('kosan.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -41,14 +41,17 @@
                 <textarea class="form-control" name="deskripsi_kosan" rows="4" required></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="photos">Upload Foto Kosan</label>
-                <input type="file" name="photos[]" multiple class="form-control" id="photos">
+            <div class="mb-3">
+                <label for="no_handphone" class="form-label">No Handphone:</label>
+                <input type="text" class="form-control" name="no_handphone" required>
             </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">Simpan Kosan</button>
+            <div class="mb-3">
+                <label for="photos" class="form-label">Tambahkan Foto:</label>
+                <input type="file" class="form-control" id="photos" name="photos[]" multiple>
             </div>
+
+            <button type="submit" class="btn btn-primary">Simpan Kosan</button>
         </form>
     </div>
 @endsection

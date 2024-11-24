@@ -1,4 +1,4 @@
-<!-- resources/views/kosan/manage.blade.php -->
+<!-- resources/views/kos/manage.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -9,27 +9,9 @@
             @foreach ($kosans as $k)
                 <div class="col-md-4 mb-3">
                     <div class="card h-100">
-                        <!-- Menambahkan carousel untuk gambar kosan -->
-                        <div id="carouselExampleControls{{ $k->id }}" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner">
-                                @foreach ($k->photos as $index => $photo)
-                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                        <img class="d-block w-100" src="{{ asset('storage/' . $photo->photo_url) }}"
-                                            alt="Foto Kosan">
-                                    </div>
-                                @endforeach
-                            </div>
-                            <a class="carousel-control-prev" href="#carouselExampleControls{{ $k->id }}"
-                                role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselExampleControls{{ $k->id }}"
-                                role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
+                        <!-- Menampilkan gambar kosan -->
+                        <img class="card-img-top" src="{{ $k->photos->first() ? asset('storage/' . $k->photos->first()->photo_url) : asset('images/default-kosan.jpg') }}"
+                            alt="Foto Kosan" style="width: 100%; height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">{{ $k->nama_kosan }}</h5>
                             <p class="card-text">
@@ -37,7 +19,8 @@
                                 <strong>Harga:</strong> {{ $k->harga_kosan }}<br>
                                 <strong>Kamar Tersedia:</strong> {{ $k->kamar_tersedia }}<br>
                                 <strong>Jenis Kosan:</strong> {{ $k->jenis_kosan }}<br>
-                                <strong>Deskripsi:</strong> {{ $k->deskripsi_kosan }}
+                                <strong>Deskripsi:</strong> {{ $k->deskripsi_kosan }}<br>
+                                <strong>No Handphone:</strong> {{ $k->no_handphone }}<br>
                             </p>
                         </div>
                         <div class="card-footer d-flex justify-content-between">

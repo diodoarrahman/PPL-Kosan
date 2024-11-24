@@ -17,7 +17,9 @@
                             <p class="card-text mb-1" style="font-size: 0.875rem;">
                                 <strong>Harga:</strong> Rp{{ number_format($kosan->harga_kosan) }}<br>
                                 <small class="text-muted">Alamat:</small>
-                                {{ Str::limit($kosan->alamat_kosan, 30) }}
+                                {{ Str::limit($kosan->alamat_kosan, 30) }}<br>
+                                <small class="text-muted">No Handphone:</small>
+                                {{ $kosan->no_handphone }}
                             </p>
                         </div>
                         <div class="card-footer p-2 d-flex justify-content-between">
