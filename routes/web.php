@@ -6,6 +6,7 @@ use App\Http\Controllers\KosanController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\KosController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,9 +50,8 @@ Route::delete('/favorite/{id}', [FavoriteController::class, 'destroy'])->name('f
 Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
 Route::post('/transaction/create', [TransactionController::class, 'store'])->name('transaction.store');
 // Tambahkan di web.php
-Route::get('/profile/edit', function () {
-    return view('profile.edit');
-})->name('profile.edit');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
 
 // Tambahkan di web.php
 Route::get('/admin/dashboard', function () {
@@ -65,7 +65,7 @@ Route::get('/owner/dashboard', function () {
 // Tambahkan di web.php
 Route::get('/user/manage', function () {
     return view('user.manage');
-})->name('user.manage'); 
+})->name('user.manage');
 
 Route::get('/test-route', function () {
     return "This is a test route.";

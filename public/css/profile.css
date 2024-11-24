@@ -1,0 +1,44 @@
+/* public/css/profile.css */
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    color: #2c6e49;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #2c6e49;
+}
+
+.form-control {
+    border: 1px solid #2c6e49;
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    border-color: #28a745; /* Warna border saat fokus */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Efek bayangan saat fokus */
+}
+
+.btn-primary {
+    background-color: #2c6e49;
+    border-color: #2c6e49;
+}
+
+.btn-primary:hover {
+    background-color: #28a745; /* Warna saat hover */
+    border-color: #28a745;
+}
+
+.invalid-feedback {
+    color: red; /* Warna pesan kesalahan */
+}
+
+.img-thumbnail {
+    border-radius: 10px; /* Membuat sudut gambar lebih halus */
+}

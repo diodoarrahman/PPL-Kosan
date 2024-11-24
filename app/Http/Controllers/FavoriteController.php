@@ -53,4 +53,17 @@ class FavoriteController extends Controller
      * Menghapus kosan dari daftar favorit.
      */
 
+    public function destroy($id)
+    {
+        // Temukan favorit berdasarkan ID
+        $favorite = Favorite::findOrFail($id);
+
+        // Hapus favorit
+        $favorite->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('favorite.index')->with('success', 'Favorit berhasil dihapus.');
+    }
 }
+
+

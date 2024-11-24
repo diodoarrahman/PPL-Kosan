@@ -2,35 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Search form -->
-    <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
-        <div class="container-fluid px-0">
-            <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
-                <div class="d-flex align-items-center">
-                    <form class="navbar-search form-inline" id="navbar-search-main">
-                        <div class="input-group input-group-merge search-bar">
-                            <span class="input-group-text" id="topbar-addon">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="Search"
-                                aria-label="Search" aria-describedby="topbar-addon">
-                        </div>
-                    </form>
-                    <div class="btn-group sort-btn ms-2">
-                        <button class="btn" type="button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" style="background-color: #28a745; color: white;">Sort</button>
-                        <button class="btn dropdown-toggle" data-sort="none" style="background-color: #28a745; color: white;"><i class="fa fa-sort"></i></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" tabindex="-1" data-type="alpha">Name</a></li>
-                            <li><a href="#" tabindex="-1" data-type="numeric">Date</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
+    @include('components.search')
     <div class="container">
         <div class="row">
             @forelse ($kosans as $kosan)
@@ -50,8 +22,9 @@
                         </div>
                         <div class="card-footer p-2 d-flex justify-content-between">
                             <!-- Tombol Tambah Favorit -->
-                            <form action="{{ route('favorite.store', $kosan->id) }}" method="POST">
+                            <form action="{{ route('favorite.store') }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
                                 <button type="submit" class="btn btn-outline-danger btn-sm" style="font-size: 0.75rem;">
                                     <i class="bi bi-heart-fill"></i> Favorit
                                 </button>

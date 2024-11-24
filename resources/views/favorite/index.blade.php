@@ -1,4 +1,3 @@
-<!-- resources/views/favorite/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -13,14 +12,6 @@
                             <img src="{{ $favorite->kosan->photos->first() ? asset('storage/' . $favorite->kosan->photos->first()->photo_url) : asset('images/default-kosan.jpg') }}"
                                 class="card-img-top rounded" alt="Foto Kosan"
                                 style="height: 200px; object-fit: cover; border-radius: 8px;">
-                            <!-- Icon Hapus di Sudut -->
-                            <form action="{{ route('favorite.destroy', $favorite->id) }}" method="POST" style="position: absolute; top: 10px; right: 10px;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 8px; border-radius: 50%;">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
                         </div>
 
                         <div class="card-body" style="padding: 10px;">
@@ -37,19 +28,30 @@
                             </p>
                         </div>
 
-                        <div class="card-footer d-flex justify-content-center" style="background-color: transparent; border: none;">
+                        <div class="card-footer d-flex justify-content-between"
+                            style="background-color: transparent; border: none;">
                             <!-- Tombol Detail -->
                             <a href="{{ route('kosan.show', $favorite->kosan->id) }}" class="btn btn-primary btn-sm"
                                 style="background-color: #2C6E49; color: #FFF8DC; font-size: 0.85rem;">
                                 Detail
                             </a>
+                            <!-- Icon Hapus -->
+                            <form action="{{ route('favorite.destroy', $favorite->id) }}" method="POST"
+                                style="margin-left: 10px;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 8px;">
+                                    <i class="bi bi-trash"></i> Hapus <!-- Menambahkan teks "Hapus" -->
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             @empty
                 <!-- Empty State -->
                 <div class="col-12">
-                    <div class="alert alert-warning text-center" role="alert" style="background-color: #FFF8DC; color: #2C6E49;">
+                    <div class="alert alert-warning text-center" role="alert"
+                        style="background-color: #FFF8DC; color: #2C6E49;">
                         <strong>Belum ada kosan yang ditambahkan ke favorit.</strong>
                     </div>
                 </div>
