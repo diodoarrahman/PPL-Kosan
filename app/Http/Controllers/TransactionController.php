@@ -12,9 +12,6 @@ class TransactionController extends Controller
         $transactions = Transaction::where('user_id', Auth::id())->get();
         return view('transaction.index', compact('transactions'));
     }
-
-    
-
     public function store(Request $request)
     {
         $request->validate([
@@ -32,5 +29,11 @@ class TransactionController extends Controller
         ]);
 
         return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil, Selesaikan Pembayaran');
+    }
+    public function cancel($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update(['status' => 'Dibatalkan']);
+        return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil dibatalkan');
     }
 }

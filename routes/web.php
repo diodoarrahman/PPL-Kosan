@@ -52,6 +52,8 @@ Route::delete('/favorite/{id}', [FavoriteController::class, 'destroy'])->name('f
 // Transaction routes
 Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
 Route::post('/transaction/create', [TransactionController::class, 'store'])->name('transaction.store');
+Route::post('/transaction/cancel/{id}', [TransactionController::class, 'cancel'])->name('transaction.cancel');
+
 // Tambahkan di web.php
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');

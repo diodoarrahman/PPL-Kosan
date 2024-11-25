@@ -31,10 +31,10 @@
                             </p>
                             <p>
                                 <strong>Status:</strong>
-                                @if ($transaction->status == 'Selesai')
+                                @if ($transaction->status == 'Lunas')
                                     <span class="badge bg-success">Selesai</span>
-                                @elseif ($transaction->status == 'Pending')
-                                    <span class="badge bg-warning">Pending</span>
+                                @elseif ($transaction->status == 'Menunggu Pembayaran')
+                                    <span class="badge bg-warning">Menunggu Pembayaran</span>
                                 @else
                                     <span class="badge bg-danger">Dibatalkan</span>
                                 @endif
@@ -49,10 +49,10 @@
                         style="background-color: #2C6E49; color: #FFF8DC; border: 1px solid #C7A27C;">
                         Detail Transaksi
                     </a>
-                    @if ($transaction->status == 'Pending')
+                    @if ($transaction->status == 'Menunggu Pembayaran')
                         <form action="{{ route('transaction.cancel', $transaction->id) }}" method="POST">
                             @csrf
-                            @method('PATCH')
+                            @method('POST')
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="bi bi-x-circle"></i> Batalkan
                             </button>
@@ -61,9 +61,7 @@
                 </div>
             </div>
         @empty
-            <div class="alert alert-warning text-center" style="background-color: #FFF8DC; color: #2C6E49;">
-                <strong>Belum ada transaksi yang tercatat.</strong>
-            </div>
+            @include('layouts.empty')
         @endforelse
     </div>
 @endsection
