@@ -30,21 +30,30 @@
         }
 
         .profile-icon {
-            width: 40px; /* Ukuran gambar */
-            height: 40px; /* Ukuran gambar */
-            margin-right: 5px; /* Jarak antara gambar dan teks */
-            vertical-align: middle; /* Menjaga gambar sejajar dengan teks */
-            border-radius: 50%; /* Membuat gambar menjadi bulat */
-            border: 2px solid #F3EAC2; /* Border untuk gambar */
-            transition: transform 0.2s; /* Efek transisi saat hover */
+            width: 40px;
+            /* Ukuran gambar */
+            height: 40px;
+            /* Ukuran gambar */
+            margin-right: 5px;
+            /* Jarak antara gambar dan teks */
+            vertical-align: middle;
+            /* Menjaga gambar sejajar dengan teks */
+            border-radius: 50%;
+            /* Membuat gambar menjadi bulat */
+            border: 2px solid #F3EAC2;
+            /* Border untuk gambar */
+            transition: transform 0.2s;
+            /* Efek transisi saat hover */
         }
 
         .profile-icon:hover {
-            transform: scale(1.1); /* Membesarkan gambar saat hover */
+            transform: scale(1.1);
+            /* Membesarkan gambar saat hover */
         }
 
         .navbar-custom .nav-item {
-            margin-left: 15px; /* Jarak antar item navbar */
+            margin-left: 15px;
+            /* Jarak antar item navbar */
         }
     </style>
 </head>
@@ -83,10 +92,12 @@
                         </li>
                     @endauth
 
-                    @auth
+                    @if (Auth::user()->role === 'user' )
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('favorite.index') }}">Favorit</a>
                         </li>
+                    @endif
+                    @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('transaction.index') }}">Transaksi</a>
                         </li>
@@ -105,7 +116,8 @@
                 <ul class="navbar-nav ms-auto">
                     @auth
                         <li class="nav-item dropstart">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : asset('images/use.png') }}"
                                     alt="Profile Icon" class="profile-icon">
                                 Profil

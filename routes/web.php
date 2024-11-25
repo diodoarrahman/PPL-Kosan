@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OwnerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KosanController;
@@ -60,9 +61,8 @@ Route::get('/admin/dashboard', function () {
     return view('dashboard.admin');
 })->name('admin.dashboard');
 
-Route::get('/owner/dashboard', function () {
-    return view('dashboard.owner');
-})->name('owner.dashboard');
+Route::get('/owner/dashboard', [OwnerController::class, 'ownerDashboard'])->name('owner.dashboard');
+
 
 // Tambahkan di web.php
 Route::get('/user/manage', function () {
