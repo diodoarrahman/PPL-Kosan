@@ -11,18 +11,18 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'comment' => 'required|string',
             'kosan_id' => 'required|exists:kosans,id',
-            'comment' => 'required|string|max:255',
-            'parent_id' => 'nullable|exists:comments,id',
+            'parent_id' => 'nullable|exists:comments,id'
         ]);
 
         Comment::create([
+            'user_id' => auth()->id(),
             'kosan_id' => $request->kosan_id,
-            'user_id' => Auth::id(),
             'comment' => $request->comment,
-            'parent_id' => $request->parent_id,
+            'parent_id' => $request->parent_id
         ]);
 
-        return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
+        return back();
     }
 }

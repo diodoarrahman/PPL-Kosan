@@ -1,5 +1,6 @@
 <!-- resources/views/kos/show.blade.php -->
 @extends('layouts.app')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
 @section('content')
     <div class="container">
@@ -22,31 +23,52 @@
                         @csrf
                         <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
                         <div class="input-group mb-3">
-                            <input type="text" name="comment" class="form-control comment-input" placeholder="Tulis komentar..." required>
+                            <input type="text" name="comment" class="form-control comment-input"
+                                placeholder="Tulis komentar..." required>
                             <button class="btn btn-outline-primary" type="submit">Kirim</button>
                         </div>
                     </form>
 
                     <!-- Menampilkan Komentar -->
-                    <div id="commentSection" class="overflow-auto" style="max-height: 300px; border: 1px solid #C7A27C; padding: 10px; background-color: #FFF8DC;">
-                        @foreach ($kosan->comments as $comment)
+                    <div id="commentSection" class="overflow-auto"
+                        style="max-height: 300px; border: 1px solid #C7A27C; padding: 10px; background-color: #FFF8DC;">
+                        @foreach ($kosan->comments->whereNull('parent_id') as $comment)
                             <div class="border p-2 mb-1">
                                 <strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}
+                                @auth
+                                    <button class="btn btn-sm reply-button" onclick="toggleReplyForm({{ $comment->id }})"
+                                    style="
+                                    color: #2C6E49;
+                                    background-color: #F3EAC2;
+                                    border: 1px solid #C7A27C;
+                                    border-radius: 15px;
+                                    padding: 2px 10px;
+                                    font-size: 0.8rem;
+                                    transition: all 0.3s ease;
+                                    margin-left: 10px;
+                                "
+                                        onmouseover="this.style.backgroundColor='#2C6E49'; this.style.color='#FFF8DC'"
+                                        onmouseout="this.style.backgroundColor='#F3EAC2'; this.style.color='#2C6E49'">
+                                        <i class="bi bi-reply-fill"></i> Balas
+                                    </button>
+                                @endauth
 
-                                <!-- Form Balasan -->
-                                <form action="{{ route('comments.store') }}" method="POST" class="mt-2">
+                                <!-- Form Balasan (Hidden by default) -->
+                                <form id="replyForm{{ $comment->id }}" action="{{ route('comments.store') }}"
+                                    method="POST" class="mt-2" style="display: none;">
                                     @csrf
                                     <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
                                     <input type="hidden" name="parent_id" value="{{ $comment->id }}">
                                     <div class="input-group mb-3">
-                                        <input type="text" name="comment" class="form-control comment-input" placeholder="Balas komentar..." required>
+                                        <input type="text" name="comment" class="form-control comment-input"
+                                            placeholder="Balas komentar..." required>
                                         <button class="btn btn-outline-primary" type="submit">Kirim</button>
                                     </div>
                                 </form>
 
                                 <!-- Menampilkan Balasan di Bawah Komentar -->
                                 @foreach ($comment->replies as $reply)
-                                    <div class="reply-container ms-3">
+                                    <div class="reply-container ms-3 mt-2 border-start ps-2">
                                         <strong>{{ $reply->user->name }}:</strong> {{ $reply->comment }}
                                     </div>
                                 @endforeach
@@ -54,6 +76,13 @@
                         @endforeach
                     </div>
                 </div>
+
+                <script>
+                    function toggleReplyForm(commentId) {
+                        const form = document.getElementById('replyForm' + commentId);
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                    }
+                </script>
 
                 <!-- Tombol Tambah ke Favorit -->
                 @auth
