@@ -92,12 +92,12 @@
                         </li>
                     @endauth
 
-                    @if (Auth::user()->role === 'user' )
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('favorite.index') }}">Favorit</a>
-                        </li>
-                    @endif
                     @auth
+                        @if (Auth::user()->role === 'user')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('favorite.index') }}">Favorit</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('transaction.index') }}">Transaksi</a>
                         </li>
