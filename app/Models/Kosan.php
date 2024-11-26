@@ -27,7 +27,10 @@ class Kosan extends Model
     public function favorites() {
         return $this->hasMany(Favorite::class);
     }
-
+    public function isFavoritedByUser($user)
+    {
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
     public function transactions() {
         return $this->hasMany(Transaction::class);
     }

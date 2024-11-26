@@ -26,44 +26,49 @@ class FavoriteController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input kosan_id harus ada dan valid di tabel kosans
+        // Validasi input kosan_id
         $request->validate([
             'kosan_id' => 'required|exists:kosans,id',
         ]);
-
-        // Periksa apakah kosan sudah ada di daftar favorit
+    
+        // Cek apakah kosan sudah ada di favorit
         $existingFavorite = Favorite::where('user_id', Auth::id())
             ->where('kosan_id', $request->kosan_id)
             ->first();
-
+    
         if ($existingFavorite) {
-            return redirect()->route('favorite.index')->with('error', 'Kosan ini sudah ada di daftar favorit.');
+            // Kirim session error jika kosan sudah ada di favorit
+            session()->flash('error', 'Kosan ini sudah ada di daftar favorit.');
+            return response()->json(['status' => 'error']);
         }
-
-        // Tambahkan kosan ke favorit
+    
+        // Tambahkan ke favorit
         Favorite::create([
             'user_id' => Auth::id(),
             'kosan_id' => $request->kosan_id,
         ]);
-
-        return redirect()->route('favorite.index')->with('success', 'Kosan berhasil ditambahkan ke favorit.');
+    
+        // Kirim session sukses jika berhasil ditambahkan
+        session()->flash('success', 'Kosan berhasil ditambahkan ke favorit!');
+        return response()->json(['status' => 'success']);
     }
+    
 
     /**
      * Menghapus kosan dari daftar favorit.
      */
 
-    public function destroy($id)
+    public function destroy($kosanId)
     {
-        // Temukan favorit berdasarkan ID
-        $favorite = Favorite::findOrFail($id);
+        $favorite = Favorite::where('kosan_id', $kosanId)
+            ->where('user_id', Auth::id())
+            ->first();
 
-        // Hapus favorit
-        $favorite->delete();
+        if ($favorite) {
+            $favorite->delete();
+            return response()->json(['status' => 'success']);
+        }
 
-        // Redirect kembali dengan pesan sukses
-        return redirect()->route('favorite.index')->with('success', 'Favorit berhasil dihapus.');
+        return response()->json(['status' => 'error']);
     }
 }
-
-

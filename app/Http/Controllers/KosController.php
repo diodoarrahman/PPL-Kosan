@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class KosController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $kosans = Kosan::all();
         return view('mainpage', data: compact('kosans'));
     }
     public function manage()
     {
-        $kosans = Kosan::all();
-        return view('kos.manage',['kosans' => $kosans]);
+        // Ambil kosan yang dimiliki oleh pengguna yang sedang login
+        $kosans = auth()->user()->kosans; // Relasi antara User dan Kosan
+
+        return view('kos.manage', compact('kosans'));
     }
     public function show($id)
     {

@@ -2,7 +2,7 @@
     <div class="container-fluid px-0">
         <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
             <div class="d-flex align-items-center">
-                <form class="navbar-search form-inline" id="navbar-search-main">
+                <form action="{{ route('kosan.index') }}" method="GET" class="navbar-search form-inline" id="navbar-search-main">
                     <div class="input-group input-group-merge search-bar">
                         <span class="input-group-text" id="topbar-addon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -10,17 +10,19 @@
                             </svg>
                         </span>
                         <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="Search"
-                            aria-label="Search" aria-describedby="topbar-addon">
+                               name="search" value="{{ request('search') }}" aria-label="Search" aria-describedby="topbar-addon">
                     </div>
                 </form>
-                <div class="btn-group sort-btn ms-2">
-                    <button class="btn" type="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false" style="background-color: #28a745; color: white;">Sort</button>
-                    <button class="btn dropdown-toggle" data-sort="none"
-                        style="background-color: #28a745; color: white;"><i class="fa fa-sort"></i></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" tabindex="-1" data-type="alpha">Name</a></li>
-                        <li><a href="#" tabindex="-1" data-type="numeric">Date</a></li>
+                
+
+                <!-- Dropdown Button -->
+                <div class="btn-group ms-2">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownSort" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #28a745; color: white;">
+                        Sort
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownSort">
+                        <li><a class="dropdown-item" href="#" data-type="alpha">Name</a></li>
+                        <li><a class="dropdown-item" href="#" data-type="numeric">Date</a></li>
                     </ul>
                 </div>
             </div>
