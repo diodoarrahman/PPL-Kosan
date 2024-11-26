@@ -20,14 +20,20 @@ class OwnerController extends Controller
 
         // Hitung total pendapatan berdasarkan transaksi selesai
         $totalPendapatan = 0;
+        $kamarDisewakan = 0; // Tambahkan variabel untuk jumlah kamar yang disewakan
 
         foreach ($kosans as $kosan) {
-            $transaksi = $kosan->transactions()->where('status', 'Selesai')->get();
+            $transaksi = $kosan->transactions()->where('status', 'Lunas')->get();
+
+            // Hitung pendapatan
             $totalPendapatan += $transaksi->sum(function ($transaction) use ($kosan) {
                 return $transaction->jumlah_transaksi * $kosan->harga_kosan;
             });
+
+            // Hitung kamar yang sedang disewakan
+            $kamarDisewakan += $transaksi->sum('jumlah_transaksi');
         }
 
-        return view('dashboard.owner', compact('kosans', 'totalKosan', 'totalKamar', 'totalPendapatan'));
+        return view('dashboard.owner', compact('kosans', 'totalKosan', 'totalKamar', 'totalPendapatan', 'kamarDisewakan'));
     }
 }
