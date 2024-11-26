@@ -77,3 +77,4 @@ Route::get('/test-route', function () {
 // Route::get('/kosan/manage-test', [KosanController::class, 'manage']);
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::post('/transaction/{id}/pay', [TransactionController::class, 'pay'])->name('transaction.pay');

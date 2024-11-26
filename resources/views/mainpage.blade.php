@@ -23,6 +23,10 @@
                                 <small class="text-muted">Alamat:</small> {{ Str::limit($kosan->alamat_kosan, 40) }}<br>
                                 <small class="text-muted">No Handphone:</small> {{ $kosan->no_handphone }}
                             </p>
+
+                            @if ($kosan->kamar_tersedia === 0)
+                                <p class="text-danger" style="font-weight: bold;">Kosan Tidak Tersedia</p>
+                            @endif
                         </div>
                         <div class="card-footer p-3 d-flex justify-content-between align-items-center">
                             <!-- Tombol Favorit -->
@@ -36,8 +40,7 @@
                                 </button>
                             @else
                                 <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-bookmark-heart">
-                                    </i>
+                                    <i class="bi bi-bookmark-heart"></i>
                                 </a>
                             @endif
 

@@ -45,14 +45,16 @@
 
                 <!-- Footer Card -->
                 <div class="card-footer d-flex justify-content-between" style="background-color: #F3EAC2;">
-                    <a href="{{ route('kosan.show', $transaction->id) }}" class="btn btn-primary btn-sm"
-                        style="background-color: #2C6E49; color: #FFF8DC; border: 1px solid #C7A27C;">
-                        Detail Transaksi
-                    </a>
+                    <button class="btn btn-primary btn-sm show-transaction-modal"
+                        data-bs-toggle="modal" data-bs-target="#transactionModal"
+                        data-transaction-id="{{ $transaction->id }}" data-kosan-id="{{ $transaction->kosan->id }}"
+                        data-kosan-name="{{ $transaction->kosan->nama_kosan }}" data-status="{{ $transaction->status }}"
+                        data-jumlah="{{ $transaction->jumlah_transaksi }}" data-tanggal="{{ $transaction->transaction_date }}">
+                        Lihat Detail
+                    </button>
                     @if ($transaction->status == 'Menunggu Pembayaran')
                         <form action="{{ route('transaction.cancel', $transaction->id) }}" method="POST">
                             @csrf
-                            @method('POST')
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="bi bi-x-circle"></i> Batalkan
                             </button>
@@ -64,4 +66,54 @@
             @include('layouts.empty')
         @endforelse
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transactionModalLabel">Detail Transaksi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nama Kosan:</strong> <span id="modalKosanName"></span></p>
+                    <p><strong>Jumlah Transaksi:</strong> <span id="modalJumlah"></span></p>
+                    <p><strong>Tanggal Transaksi:</strong> <span id="modalTanggal"></span></p>
+                    <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <form id="bayarForm" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Bayar Sekarang</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('transactionModal');
+        const bayarForm = document.getElementById('bayarForm');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const transactionId = button.getAttribute('data-transaction-id');
+            const kosanName = button.getAttribute('data-kosan-name');
+            const jumlah = button.getAttribute('data-jumlah');
+            const tanggal = button.getAttribute('data-tanggal');
+            const status = button.getAttribute('data-status');
+
+            // Set modal content
+            document.getElementById('modalKosanName').textContent = kosanName;
+            document.getElementById('modalJumlah').textContent = jumlah;
+            document.getElementById('modalTanggal').textContent = tanggal;
+            document.getElementById('modalStatus').textContent = status;
+
+            // Set form action for Bayar Sekarang
+            bayarForm.action = `/transaction/${transactionId}/pay`;
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
@@ -35,5 +36,32 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
         $transaction->update(['status' => 'Dibatalkan']);
         return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil dibatalkan');
+    }
+    public function pay($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        if ($transaction->status !== 'Menunggu Pembayaran') {
+            return redirect()->back()->with('error', 'Transaksi tidak dapat dibayar.');
+        }
+
+        // Ubah status transaksi menjadi selesai
+        $transaction->status = 'Lunas';
+        $transaction->save();
+
+        // Kurangi jumlah kamar tersedia
+        $kosan = $transaction->kosan;
+        $kosan->kamar_tersedia -= $transaction->jumlah_transaksi;
+        $kosan->save();
+
+        // Simpan data penyewa baru jika diperlukan
+        // Contoh: Membuat entri di tabel "penghuni"
+        // Penghuni::create([
+        //     'kosan_id' => $kosan->id,
+        //     'user_id' => Auth::id(),
+        //     ...
+        // ]);
+
+        return redirect()->route('transaction.index')->with('success', 'Pembayaran berhasil, transaksi selesai!');
     }
 }
