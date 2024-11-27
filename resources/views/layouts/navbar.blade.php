@@ -88,7 +88,6 @@
                                 <li><a class="dropdown-item" href="{{ route('user.manage') }}">Manajemen Pengguna</a></li>
                             @endif
                         </ul>
-
                         </li>
                     @endauth
 
@@ -104,12 +103,10 @@
                     @endauth
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}"
-                                onclick="return confirm('Silakan login untuk mengakses fitur ini.')">Favorit</a>
+                            <a class="nav-link" href="#" onclick="loginAlert()">Favorit</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}"
-                                onclick="return confirm('Silakan login untuk mengakses fitur ini.')">Transaksi</a>
+                            <a class="nav-link" href="#" onclick="loginAlert()">Transaksi</a>
                         </li>
                     @endguest
                 </ul>
@@ -144,6 +141,8 @@
             </div>
         </div>
     </nav>
+
+   @include('layouts.loginalert')
 
     <script src="{{ asset('js/bootstrap.min.bundle.js') }}"></script>
 </body>

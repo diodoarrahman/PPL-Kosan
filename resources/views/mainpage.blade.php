@@ -39,8 +39,8 @@
                                         class="bi {{ $kosan->isFavoritedByUser(Auth::user()) ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"></i>
                                 </button>
                             @else
-                                <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-bookmark-heart"></i>
+                                <a class="btn btn-outline-danger btn-sm" onclick="loginAlert()"> 
+                                    <i class="bi bi-suit-heart"></i>
                                 </a>
                             @endif
 
@@ -60,8 +60,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Jangan lupa untuk menambahkan token CSRF -->
 @endsection
 
+@include('layouts.loginalert')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     $(document).ready(function () {
         // Event listener untuk tombol tambah favorit/unfavorite
