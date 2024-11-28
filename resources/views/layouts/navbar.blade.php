@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kos-Kosan</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .navbar-custom {
             background-color: #2C6E49;
@@ -54,6 +55,37 @@
         .navbar-custom .nav-item {
             margin-left: 15px;
             /* Jarak antar item navbar */
+        }
+
+        .dropdown-menu {
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .dropdown-item {
+            color: #2C6E49;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #A7C957;
+            color: #ffffff;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            vertical-align: middle;
+            border-radius: 50%;
+            border: 2px solid #F3EAC2;
+            transition: transform 0.2s;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -115,14 +147,14 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     @auth
-                        <li class="nav-item dropstart">
+                        <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : asset('images/use.png') }}"
                                     alt="Profile Icon" class="profile-icon">
-                                Profil
+                                <i class="fas fa-chevron-down"></i>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Atur Profil</a></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
