@@ -26,8 +26,8 @@
                                 Sort
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownSort">
-                                <li><a class="dropdown-item" href="#" data-type="alpha">Name</a></li>
-                                <li><a class="dropdown-item" href="#" data-type="numeric">Date</a></li>
+                                <li><a class="dropdown-item" href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'asc']) }}">Harga: Rendah ke Tinggi</a></li>
+                                <li><a class="dropdown-item" href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'desc']) }}">Harga: Tinggi ke Rendah</a></li>
                             </ul>
                         </div>
                     </div>
