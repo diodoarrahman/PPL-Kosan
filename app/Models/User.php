@@ -25,7 +25,7 @@ class User extends Authenticatable
     ];
 
     public function kosans() {
-        return $this->hasMany(Kosan::class, 'owner_id');
+        return $this->hasMany(Kosan::class, 'user_id');
     }
 
     public function favorites() {

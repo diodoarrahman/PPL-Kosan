@@ -4,38 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Kosan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
-class KosController extends Controller
+
+
+class KosanController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        // Ambil data kosan dengan query builder
-        $kosans = Kosan::query();
-
-        // Filter berdasarkan search (nama atau alamat kosan)
-        if ($request->has('search') && $request->search != '') {
-            $searchTerm = $request->search;
-            $kosans->where(function ($query) use ($searchTerm) {
-                $query->where('nama_kosan', 'like', '%' . $searchTerm . '%')
-                      ->orWhere('alamat_kosan', 'like', '%' . $searchTerm . '%');
-            });
-        }
-
-        // Sort berdasarkan harga jika ada parameter 'sort'
-        if ($request->has('sort')) {
-            $sortDirection = $request->sort == 'asc' ? 'asc' : 'desc';
-            $kosans->orderBy('harga_kosan', $sortDirection);
-        }
-
-        // Ambil data kosan setelah filter dan sorting
-        $kosans = $kosans->get();
-
-        // Kirim data kosan ke view
+        $kosans = Kosan::all();
         return view('mainpage', compact('kosans'));
     }
-
     public function manage()
     {
         // Ambil kosan yang dimiliki oleh pengguna yang sedang login
@@ -43,7 +23,6 @@ class KosController extends Controller
 
         return view('kos.manage', compact('kosans'));
     }
-
     public function show($id)
     {
         $kosan = Kosan::findOrFail($id);
@@ -103,13 +82,11 @@ class KosController extends Controller
         $kosan->update($request->only(['nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan', 'no_handphone']));
 
         if ($request->hasFile('photos')) {
-            // Menghapus foto lama
             foreach ($kosan->photos as $photo) {
                 Storage::disk('public')->delete($photo->photo_url);
                 $photo->delete();
             }
 
-            // Menyimpan foto baru
             foreach ($request->file('photos') as $photo) {
                 $path = $photo->store('photos', 'public');
                 $kosan->photos()->create(['photo_url' => $path]);
@@ -123,7 +100,6 @@ class KosController extends Controller
     {
         $kosan = Kosan::findOrFail($id);
 
-        // Hapus foto yang terasosiasi
         foreach ($kosan->photos as $photo) {
             Storage::disk('public')->delete($photo->photo_url);
             $photo->delete();
@@ -133,4 +109,11 @@ class KosController extends Controller
 
         return redirect()->route('kosan.manage')->with('success', 'Kosan beserta fotonya berhasil dihapus.');
     }
+
+    public function test()
+    {
+        dd('Fungsi test() dipanggil'); // Debugging dengan dump dan die
+        return view('welcome');
+    }
+    
 }

@@ -36,7 +36,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Route::put('/kosan/{id}', [KosController::class, 'update'])->name('kosan.update');
 // Route::delete('/kosan/{id}', [KosController::class, 'destroy'])->name('kosan.destroy');
 Route::get('/mainpage', [KosController::class, 'index'])->name('mainpage');
-Route::get('/kosan',[KosController::class,'index'])->name('kosan.index');
+Route::get('/kosan', [KosController::class, 'index'])->name('kosan.index');
 Route::get('/kosan/manage/', [KosController::class, 'manage'])->name('kosan.manage');
 Route::get('/kosan/create', [KosController::class, 'create'])->name('kosan.create');
 Route::post('/kosan', [KosController::class, 'store'])->name('kosan.store');
@@ -77,4 +77,4 @@ Route::get('/test-route', function () {
 // Route::get('/kosan/manage-test', [KosanController::class, 'manage']);
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-
+Route::post('/transaction/{id}/pay', [TransactionController::class, 'pay'])->name('transaction.pay');

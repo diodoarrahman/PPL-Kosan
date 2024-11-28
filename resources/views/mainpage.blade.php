@@ -23,16 +23,26 @@
                                 <small class="text-muted">Alamat:</small> {{ Str::limit($kosan->alamat_kosan, 40) }}<br>
                                 <small class="text-muted">No Handphone:</small> {{ $kosan->no_handphone }}
                             </p>
+
+                            @if ($kosan->kamar_tersedia === 0)
+                                <p class="text-danger" style="font-weight: bold;">Kosan Tidak Tersedia</p>
+                            @endif
                         </div>
                         <div class="card-footer p-3 d-flex justify-content-between align-items-center">
-                            <!-- Tombol Tambah Favorit -->
-                            <form action="{{ route('favorite.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-heart-fill"></i> Favorit
+                            <!-- Tombol Favorit -->
+                            @if (Auth::check())
+                                <button type="button"
+                                    class="btn btn-sm add-to-favorite {{ $kosan->isFavoritedByUser(Auth::user()) ? 'btn-danger' : 'btn-outline-danger' }}"
+                                    data-kosan-id="{{ $kosan->id }}"
+                                    data-favorited="{{ $kosan->isFavoritedByUser(Auth::user()) ? 'true' : 'false' }}">
+                                    <i
+                                        class="bi {{ $kosan->isFavoritedByUser(Auth::user()) ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"></i>
                                 </button>
-                            </form>
+                            @else
+                                <a class="btn btn-outline-danger btn-sm" onclick="loginAlert()"> 
+                                    <i class="bi bi-suit-heart"></i>
+                                </a>
+                            @endif
 
                             <!-- Tombol Lihat Detail -->
                             <a href="{{ route('kosan.show', $kosan->id) }}" class="btn btn-primary btn-sm">Detail</a>
@@ -46,4 +56,55 @@
             @endforelse
         </div>
     </div>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Jangan lupa untuk menambahkan token CSRF -->
 @endsection
+
+@include('layouts.loginalert')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Event listener untuk tombol tambah favorit/unfavorite
+        $('.add-to-favorite').on('click', function () {
+            var kosanId = $(this).data('kosan-id'); // Ambil kosan_id dari data-kosan-id
+            var token = $('meta[name="csrf-token"]').attr('content'); // Ambil token CSRF
+            var button = $(this); // Simpan tombol yang di-click
+
+            // Cek apakah kosan sudah difavoritkan
+            var isFavorited = button.hasClass('btn-danger');
+
+            // Kirim AJAX request ke server untuk menambahkan/menyimpan favorit atau menghapusnya
+            $.ajax({
+                url: isFavorited
+                    ? '{{ route("favorite.destroy", ":id") }}'.replace(':id', kosanId)
+                    : '{{ route("favorite.store") }}', // URL route untuk store atau destroy favorite
+                method: isFavorited ? 'DELETE' : 'POST', // DELETE jika unfavorite, POST jika favorite
+                data: {
+                    _token: token,
+                    kosan_id: kosanId
+                },
+                success: function (response) {
+                    // Jika berhasil menambah atau menghapus favorit
+                    if (response.status === 'success') {
+                        var icon = button.find('i'); // Cari elemen ikon di dalam tombol
+
+                        if (isFavorited) {
+                            // Jika di-unfavorite, ubah ikon dan kelas tombol
+                            button.removeClass('btn-danger').addClass('btn-outline-danger');
+                            icon.removeClass('bi-suit-heart-fill').addClass('bi-suit-heart');
+                        } else {
+                            // Jika di-favoritkan, ubah ikon dan kelas tombol
+                            button.removeClass('btn-outline-danger').addClass('btn-danger');
+                            icon.removeClass('bi-suit-heart').addClass('bi-suit-heart-fill');
+                        }
+                    } else {
+                        alert(response.message || 'Terjadi kesalahan, coba lagi!');
+                    }
+                },
+                error: function () {
+                    alert('Terjadi kesalahan, coba lagi!');
+                }
+            });
+        });
+    });
+</script>
