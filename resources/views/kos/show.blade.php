@@ -41,11 +41,8 @@
                             @guest
                                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                 <script>
-                                    // Menangani form submit untuk pengguna yang belum login
                                     document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                        event.preventDefault(); // Mencegah form untuk submit
-
-                                        // Menampilkan SweetAlert untuk meminta login
+                                        event.preventDefault();
                                         Swal.fire({
                                             title: 'Login untuk membuat komentar',
                                             text: 'Anda perlu login untuk membuat komentar!',
@@ -55,7 +52,6 @@
                                             cancelButtonText: 'Batal'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                // Jika pengguna klik login, arahkan ke halaman login
                                                 window.location.href = '{{ route('login') }}';
                                             }
                                         });
@@ -184,18 +180,26 @@
     </div>
 
     <script>
+        // Fungsi untuk menampilkan atau menyembunyikan form balasan
+        function toggleReplyForm(commentId) {
+            const replyForm = document.getElementById('replyForm' + commentId);
+            if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+                replyForm.style.display = 'block';
+            } else {
+                replyForm.style.display = 'none';
+            }
+        }
+
         // Menambahkan logika untuk modal
         const jumlahKamarInput = document.getElementById('jumlah_kamar');
         const jumlahTransaksiInput = document.getElementById('jumlah_transaksi');
 
-        // Menangani perubahan input jumlah kamar
         jumlahKamarInput.addEventListener('input', function() {
             const jumlahKamar = parseInt(jumlahKamarInput.value);
             const kamarTersedia = {{ $kosan->kamar_tersedia }};
             if (jumlahKamar > kamarTersedia) {
                 jumlahKamarInput.value = kamarTersedia;
             }
-            // Update input jumlah transaksi
             jumlahTransaksiInput.value = jumlahKamarInput.value;
         });
     </script>

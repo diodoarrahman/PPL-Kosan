@@ -76,7 +76,7 @@
 <body>
     <div class="form-container">
         <div class="text-center mb-4">
-            <img src="{{ asset('path/to/logo.png') }}" alt="Logo" style="max-width: 150px;">
+            <img src="{{ asset('assets/KOSTPEDIA.png') }}" alt="Logo" style="max-width: 150px;">
         </div>
         <h3 class="text-center mb-4">Register</h3>
         <form method="POST" action="{{ route('register') }}">

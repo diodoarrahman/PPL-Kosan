@@ -125,10 +125,10 @@
         <!-- Overlay -->
         <div class="overlay"></div>
 
-        <!-- Hero Content -->   
+        <!-- Hero Content -->
         <div class="hero-content">
             <h1 class="animate__animated animate__fadeInDown">Selamat Datang</h1>
-            <h1 class="animate__animated animate__fadeInDown">di Kos-Kosan</h1>
+            <h1 class="animate__animated animate__fadeInDown">di Kostpedia</h1>
             <p class="animate__animated animate__fadeInUp">Temukan kosan terbaik untuk kebutuhan Anda.</p>
             <a href="/mainpage" class="btn btn-primary btn-lg" style="background-color: #2C6E49; border: none;">Jelajahi
                 Sekarang</a>
