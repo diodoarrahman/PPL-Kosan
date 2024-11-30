@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kosan;
+use App\Models\Transaction;
+use App\Models\User;
 
 class OwnerController extends Controller
 {
@@ -35,5 +37,29 @@ class OwnerController extends Controller
         }
 
         return view('dashboard.owner', compact('kosans', 'totalKosan', 'totalKamar', 'totalPendapatan', 'kamarDisewakan'));
+    }
+    public function adminDashboard()
+    {
+        $totalKosans = Kosan::count();
+        $availableKosans = Kosan::where('kamar_tersedia', '>', 0)->count();
+        $rentedKosans = $totalKosans - $availableKosans;
+
+        $totalTransactions = Transaction::count();
+        $totalOwners = User::whereHas('kosans')->count();
+        $totalUsers = User::count();
+
+        // Kirim data ke view
+        return view('dashboard.admin', [
+            'totalKosans' => $totalKosans,
+            'availableKosans' => $availableKosans,
+            'rentedKosans' => $rentedKosans,
+            'totalTransactions' => $totalTransactions,
+            'totalOwners' => $totalOwners,
+            'totalUsers' => $totalUsers,
+            'kosans' => Kosan::all(),
+            'transactions' => Transaction::all(),
+            'owners' => User::whereHas('kosans')->get(),
+            'users' => User::all(),
+        ]);
     }
 }
