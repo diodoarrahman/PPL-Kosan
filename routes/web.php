@@ -59,9 +59,7 @@ Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.e
 Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
 
 // Tambahkan di web.php
-Route::get('/admin/dashboard', function () {
-    return view('dashboard.admin');
-})->name('admin.dashboard');
+Route::get('/admin/dashboard', [OwnerController::class, 'adminDashboard'])->name('admin.dashboard');
 
 Route::get('/owner/dashboard', [OwnerController::class, 'ownerDashboard'])->name('owner.dashboard');
 
