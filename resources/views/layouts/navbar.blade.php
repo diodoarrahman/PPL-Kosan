@@ -93,7 +93,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('mainpage') }}">Kostpedia</a>
+            <a class="navbar-brand" href="{{ route('mainpage') }}">
+                <img src="{{ asset('assets/KOSTPEDIA.png') }}" alt="Logo"
+                    style="max-width: 40px; margin-right: 8px; border-radius: 50%;">
+                Kostpedia
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -174,7 +178,7 @@
         </div>
     </nav>
 
-   @include('layouts.loginalert')
+    @include('layouts.loginalert')
 
     <script src="{{ asset('js/bootstrap.min.bundle.js') }}"></script>
 </body>
