@@ -45,7 +45,7 @@ class OwnerController extends Controller
         $rentedKosans = $totalKosans - $availableKosans;
 
         $totalTransactions = Transaction::count();
-        $totalOwners = User::whereHas('kosans')->count();
+        $totalOwners = User::where('role', 'owner')->count();
         $totalUsers = User::count();
 
         // Kirim data ke view

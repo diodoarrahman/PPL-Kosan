@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentController;
 
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
@@ -64,10 +65,14 @@ Route::get('/admin/dashboard', [OwnerController::class, 'adminDashboard'])->name
 Route::get('/owner/dashboard', [OwnerController::class, 'ownerDashboard'])->name('owner.dashboard');
 
 
-// Tambahkan di web.php
-Route::get('/user/manage', function () {
-    return view('user.manage');
-})->name('user.manage');
+Route::get('user', [UserController::class, 'index'])->name('user.index');  // Menampilkan daftar pengguna
+Route::get('user/manage', [UserController::class, 'index'])->name('user.manage');
+Route::get('user/create', [UserController::class, 'create'])->name('user.create');  // Form tambah pengguna
+Route::post('user', [UserController::class, 'store'])->name('user.store');  // Proses simpan pengguna baru
+Route::get('user/{id}', [UserController::class, 'show'])->name('user.show');  // Detail pengguna
+Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');  // Form edit pengguna
+Route::put('user/{id}', [UserController::class, 'update'])->name('user.update');  // Proses update pengguna
+Route::delete('user/{id}', [UserController::class, 'destroy'])->name('user.destroy');  // Hapus pengguna
 
 Route::get('/test-route', function () {
     return "This is a test route.";

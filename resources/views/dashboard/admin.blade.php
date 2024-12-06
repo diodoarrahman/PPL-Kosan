@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kosans as $kosan)
+                        @foreach ($kosans->take(3) as $kosan) <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $kosan->id }}</td>
                                 <td>{{ $kosan->nama_kosan }}</td>
@@ -83,6 +83,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Tombol "More Kosan" -->
+                <div class="text-center">
+                    <a href="{{ route('kosan.manage') }}" class="btn btn-primary">More Kosan</a>
+                </div>
             </div>
 
             <div class="col-md-12 mt-4">
@@ -98,7 +103,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($transactions as $transaction)
+                        @foreach ($transactions->take(3) as $transaction) <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $transaction->id }}</td>
                                 <td>{{ $transaction->user->name }}</td>
@@ -109,6 +114,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Tombol "More Transaksi" -->
+                <div class="text-center">
+                    <a href="{{ route('transaction.index') }}" class="btn btn-primary">More Transaksi</a>
+                </div>
             </div>
 
             <div class="col-md-12 mt-4">
@@ -122,7 +132,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($owners as $owner)
+                        @foreach ($owners->take(3) as $owner) <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $owner->id }}</td>
                                 <td>{{ $owner->name }}</td>
@@ -135,6 +145,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Tombol "More Pemilik Kosan" -->
+                <div class="text-center">
+                    <a href="{{ route('user.manage') }}" class="btn btn-primary">More Pemilik Kosan</a>
+                </div>
             </div>
 
             <div class="col-md-12 mt-4">
@@ -149,7 +164,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $user)
+                        @foreach ($users->take(3) as $user) <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
@@ -159,6 +174,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Tombol "More Pengguna" -->
+                <div class="text-center">
+                    <a href="{{ route('user.manage') }}" class="btn btn-primary">More Pengguna</a>
+                </div>
             </div>
         </div>
     </div>
