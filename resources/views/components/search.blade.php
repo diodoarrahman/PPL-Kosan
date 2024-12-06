@@ -25,9 +25,13 @@
                                 style="background-color: #28a745; color: white;">
                                 Sort
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownSort">
-                                <li><a class="dropdown-item" href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'asc']) }}">Harga: Rendah ke Tinggi</a></li>
-                                <li><a class="dropdown-item" href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'desc']) }}">Harga: Tinggi ke Rendah</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownSort">
+                                <li><a class="dropdown-item"
+                                        href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'asc']) }}">Harga:
+                                        Rendah ke Tinggi</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('kosan.index', ['search' => request('search'), 'sort' => 'desc']) }}">Harga:
+                                        Tinggi ke Rendah</a></li>
                             </ul>
                         </div>
                     </div>
