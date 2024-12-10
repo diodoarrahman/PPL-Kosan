@@ -1,5 +1,6 @@
 @extends('layouts.app')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 @section('content')
     <div class="container">
@@ -9,8 +10,9 @@
             </div>
             <div class="card-body" style="color: #2C6E49;">
                 <div class="row">
-                    <!-- Bagian Kiri: Foto Kosan dan Komentar -->
+                    <!-- Bagian Kiri: Foto Kosan dan Map -->
                     <div class="col-md-6">
+                        <!-- Foto Kosan -->
                         <div class="mb-4">
                             <h5>Foto Kosan:</h5>
                             <div class="row">
@@ -25,82 +27,40 @@
                             </div>
                         </div>
 
-                        <!-- Komentar -->
-                        <div class="mt-4">
-                            <h5>Komentar:</h5>
-                            <form id="commentForm" action="{{ route('comments.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="comment" class="form-control comment-input"
-                                        placeholder="Tulis komentar..." required>
-                                    <button class="btn btn-outline-primary" type="submit">Kirim</button>
-                                </div>
-                            </form>
-
-                            @guest
-                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <!-- Peta Kosan (Jika ada latitude dan longitude) -->
+                        <div class="mb-4">
+                            <h5>Lokasi Kosan:</h5>
+                            @if($kosan->latitude && $kosan->longitude)
+                                <div id="map" style="height: 400px;"></div>
                                 <script>
-                                    document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                        event.preventDefault();
-                                        Swal.fire({
-                                            title: 'Login untuk membuat komentar',
-                                            text: 'Anda perlu login untuk membuat komentar!',
-                                            icon: 'warning',
-                                            showCancelButton: true,
-                                            confirmButtonText: 'Login',
-                                            cancelButtonText: 'Batal'
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                window.location.href = '{{ route('login') }}';
-                                            }
-                                        });
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        // Inisialisasi peta dengan level zoom 15 (lebih besar untuk zoom in lebih dekat)
+                                        var map = L.map('map').setView([{{ $kosan->latitude }}, {{ $kosan->longitude }}], 15);
+                        
+                                        // Menambahkan tile layer OpenStreetMap
+                                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        }).addTo(map);
+                        
+                                        // Menambahkan marker pada lokasi kosan
+                                        L.marker([{{ $kosan->latitude }}, {{ $kosan->longitude }}]).addTo(map)
+                                            .bindPopup("{{ $kosan->nama_kosan }}")
+                                            .openPopup();
+                        
+                                        // Menambahkan kontrol zoom untuk memperbesar atau memperkecil
+                                        L.control.zoom({
+                                            position: 'topright' // Menempatkan kontrol zoom di pojok kanan atas
+                                        }).addTo(map);
                                     });
                                 </script>
-                            @endguest
-
-                            <!-- Menampilkan Komentar -->
-                            <div id="commentSection" class="overflow-auto"
-                                style="max-height: 300px; border: 1px solid #C7A27C; padding: 10px; background-color: #FFF8DC;">
-                                @foreach ($kosan->comments->whereNull('parent_id') as $comment)
-                                    <div class="border p-2 mb-1">
-                                        <strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}
-                                        @auth
-                                            <button class="btn btn-sm reply-button"
-                                                onclick="toggleReplyForm({{ $comment->id }})"
-                                                style="color: #2C6E49; background-color: #F3EAC2; border: 1px solid #C7A27C; border-radius: 15px; padding: 2px 10px; font-size: 0.8rem; transition: all 0.3s ease; margin-left: 10px;"
-                                                onmouseover="this.style.backgroundColor='#2C6E49'; this.style.color='#FFF8DC'"
-                                                onmouseout="this.style.backgroundColor='#F3EAC2'; this.style.color='#2C6E49'">
-                                                <i class="bi bi-reply-fill"></i> Balas
-                                            </button>
-                                        @endauth
-
-                                        <!-- Form Balasan (Hidden by default) -->
-                                        <form id="replyForm{{ $comment->id }}" action="{{ route('comments.store') }}"
-                                            method="POST" class="mt-2" style="display: none;">
-                                            @csrf
-                                            <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
-                                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                            <div class="input-group mb-3">
-                                                <input type="text" name="comment" class="form-control comment-input"
-                                                    placeholder="Balas komentar..." required>
-                                                <button class="btn btn-outline-primary" type="submit">Kirim</button>
-                                            </div>
-                                        </form>
-
-                                        <!-- Menampilkan Balasan di Bawah Komentar -->
-                                        @foreach ($comment->replies as $reply)
-                                            <div class="reply-container ms-3 mt-2 border-start ps-2">
-                                                <strong>{{ $reply->user->name }}:</strong> {{ $reply->comment }}
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                            </div>
+                            @else
+                                <p class="text-muted">Lokasi kosan tidak tersedia.</p>
+                            @endif
                         </div>
+                        
+                        
                     </div>
-
-                    <!-- Bagian Kanan: Detail Kosan dan Pilih Kosan -->
+                    <!-- Bagian Kanan: Detail Kosan -->
                     <div class="col-md-6">
                         <p><strong>Alamat:</strong> {{ $kosan->alamat_kosan }}</p>
                         <p><strong>Harga:</strong> Rp{{ number_format($kosan->harga_kosan) }}</p>
@@ -175,10 +135,85 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Komentar -->
+                <div class="mt-4">
+                    <h5>Komentar:</h5>
+                    <form id="commentForm" action="{{ route('comments.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
+                        <div class="input-group mb-3">
+                            <input type="text" name="comment" class="form-control comment-input"
+                                placeholder="Tulis komentar..." required>
+                            <button class="btn btn-outline-primary" type="submit">Kirim</button>
+                        </div>
+                    </form>
+
+                    @guest
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                            document.getElementById('commentForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                                Swal.fire({
+                                    title: 'Login untuk membuat komentar',
+                                    text: 'Anda perlu login untuk membuat komentar!',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Login',
+                                    cancelButtonText: 'Batal'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '{{ route('login') }}';
+                                    }
+                                });
+                            });
+                        </script>
+                    @endguest
+
+                    <!-- Menampilkan Komentar -->
+                    <div id="commentSection" class="overflow-auto"
+                        style="max-height: 300px; border: 1px solid #C7A27C; padding: 10px; background-color: #FFF8DC;">
+                        @foreach ($kosan->comments->whereNull('parent_id') as $comment)
+                            <div class="border p-2 mb-1">
+                                <strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}
+                                @auth
+                                    <button class="btn btn-sm reply-button"
+                                        onclick="toggleReplyForm({{ $comment->id }})"
+                                        style="color: #2C6E49; background-color: #F3EAC2; border: 1px solid #C7A27C; border-radius: 15px; padding: 2px 10px; font-size: 0.8rem; transition: all 0.3s ease; margin-left: 10px;"
+                                        onmouseover="this.style.backgroundColor='#2C6E49'; this.style.color='#FFF8DC'"
+                                        onmouseout="this.style.backgroundColor='#F3EAC2'; this.style.color='#2C6E49'">
+                                        <i class="bi bi-reply-fill"></i> Balas
+                                    </button>
+                                @endauth
+
+                                <!-- Form Balasan (Hidden by default) -->
+                                <form id="replyForm{{ $comment->id }}" action="{{ route('comments.store') }}"
+                                    method="POST" class="mt-2" style="display: none;">
+                                    @csrf
+                                    <input type="hidden" name="kosan_id" value="{{ $kosan->id }}">
+                                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="comment" class="form-control comment-input"
+                                            placeholder="Balas komentar..." required>
+                                        <button class="btn btn-outline-primary" type="submit">Kirim</button>
+                                    </div>
+                                </form>
+
+                                <!-- Menampilkan Balasan di Bawah Komentar -->
+                                @foreach ($comment->replies as $reply)
+                                    <div class="reply-container ms-3 mt-2 border-start ps-2">
+                                        <strong>{{ $reply->user->name }}:</strong> {{ $reply->comment }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         // Fungsi untuk menampilkan atau menyembunyikan form balasan
         function toggleReplyForm(commentId) {

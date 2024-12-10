@@ -44,7 +44,8 @@
 
             <div class="mb-3">
                 <label for="kamar_tersedia" class="form-label">Kamar Tersedia:</label>
-                <input type="number" class="form-control" name="kamar_tersedia" value="{{ old('kamar_tersedia') }}" required>
+                <input type="number" class="form-control" name="kamar_tersedia" value="{{ old('kamar_tersedia') }}"
+                    required>
                 @error('kamar_tersedia')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -77,6 +78,23 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label for="latitude" class="form-label">Latitude:</label>
+                <input type="text" class="form-control" name="latitude" value="{{ old('latitude') }}">
+                @error('latitude')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="longitude" class="form-label">Longitude:</label>
+                <input type="text" class="form-control" name="longitude" value="{{ old('longitude') }}">
+                @error('longitude')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
 
             <div class="mb-3">
                 <label for="photos" class="form-label">Tambahkan Foto:</label>

@@ -19,7 +19,7 @@ class KosController extends Controller
             $searchTerm = $request->search;
             $kosans->where(function ($query) use ($searchTerm) {
                 $query->where('nama_kosan', 'like', '%' . $searchTerm . '%')
-                      ->orWhere('alamat_kosan', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('alamat_kosan', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -66,9 +66,21 @@ class KosController extends Controller
             'deskripsi_kosan' => 'required|string',
             'no_handphone' => 'nullable|string|max:15',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
-        $kosan = Kosan::create($request->only(['nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan', 'no_handphone']) + ['user_id' => Auth::id()]);
+        $kosan = Kosan::create($request->only([
+            'nama_kosan',
+            'alamat_kosan',
+            'harga_kosan',
+            'kamar_tersedia',
+            'jenis_kosan',
+            'deskripsi_kosan',
+            'no_handphone',
+            'latitude', // Menyimpan latitude
+            'longitude', // Menyimpan longitude
+        ]) + ['user_id' => Auth::id()]);
 
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
@@ -79,6 +91,7 @@ class KosController extends Controller
 
         return redirect()->route('kosan.manage')->with('success', 'Kosan berhasil ditambahkan beserta fotonya.');
     }
+
 
     public function edit($id)
     {
@@ -97,10 +110,22 @@ class KosController extends Controller
             'deskripsi_kosan' => 'required|string',
             'no_handphone' => 'nullable|string|max:15',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $kosan = Kosan::findOrFail($id);
-        $kosan->update($request->only(['nama_kosan', 'alamat_kosan', 'harga_kosan', 'kamar_tersedia', 'jenis_kosan', 'deskripsi_kosan', 'no_handphone']));
+        $kosan->update($request->only([
+            'nama_kosan',
+            'alamat_kosan',
+            'harga_kosan',
+            'kamar_tersedia',
+            'jenis_kosan',
+            'deskripsi_kosan',
+            'no_handphone',
+            'latitude', // Update latitude
+            'longitude', // Update longitude
+        ]));
 
         if ($request->hasFile('photos')) {
             // Menghapus foto lama
@@ -118,6 +143,7 @@ class KosController extends Controller
 
         return redirect()->route('kosan.manage')->with('success', 'Kosan berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {

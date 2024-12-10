@@ -48,6 +48,23 @@
                 <input type="text" class="form-control" name="no_handphone" value="{{ $kosan->no_handphone }}">
             </div>
 
+            <div class="mb-3">
+                <label for="latitude" class="form-label">Latitude:</label>
+                <input type="text" class="form-control" name="latitude" value="{{ $kosan->latitude }}">
+                @error('latitude')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="longitude" class="form-label">Longitude:</label>
+                <input type="text" class="form-control" name="longitude" value="{{ $kosan->longitude }}">
+                @error('longitude')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+
             <div class="col-md-4 mb-3">
                 <div class="card h-100">
                     <!-- Menampilkan gambar kosan -->

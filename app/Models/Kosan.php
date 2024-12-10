@@ -18,7 +18,9 @@ class Kosan extends Model
     'jenis_kosan',
     'deskripsi_kosan',
     'no_handphone',
-    'user_id'];
+    'user_id',
+    'latitude',
+    'longitude'];
 
     public function owner() {
         return $this->belongsTo(User::class, 'user_id');
