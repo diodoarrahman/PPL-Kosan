@@ -20,24 +20,39 @@ class OwnerController extends Controller
         // Hitung total kamar tersedia
         $totalKamar = $kosans->sum('kamar_tersedia');
 
-        // Hitung total pendapatan berdasarkan transaksi selesai
+        // Inisialisasi variabel untuk total pendapatan dan total kamar disewakan
         $totalPendapatan = 0;
-        $kamarDisewakan = 0; // Tambahkan variabel untuk jumlah kamar yang disewakan
+        $totalKamarDisewakan = 0;
 
+        // Loop untuk setiap kosan milik owner
         foreach ($kosans as $kosan) {
+            // Ambil transaksi yang statusnya 'Lunas'
             $transaksi = $kosan->transactions()->where('status', 'Lunas')->get();
 
-            // Hitung pendapatan
-            $totalPendapatan += $transaksi->sum(function ($transaction) use ($kosan) {
-                return $transaction->jumlah_transaksi * $kosan->harga_kosan;
-            });
+            // Hitung pendapatan dan jumlah kamar disewakan untuk masing-masing kosan
+            $kamarDisewakanPerKosan = 0;  // Inisialisasi untuk jumlah kamar disewakan per kosan
+            $pendapatanPerKosan = 0;  // Inisialisasi untuk pendapatan per kosan
 
-            // Hitung kamar yang sedang disewakan
-            $kamarDisewakan += $transaksi->sum('jumlah_transaksi');
+            foreach ($transaksi as $transaction) {
+                // Pendapatan per transaksi kosan
+                $pendapatanPerKosan += $transaction->jumlah_transaksi * $kosan->harga_kosan;
+                // Jumlah kamar disewakan per transaksi
+                $kamarDisewakanPerKosan += $transaction->jumlah_transaksi;
+            }
+
+            // Simpan pendapatan dan kamar disewakan untuk setiap kosan
+            $kosan->totalPendapatan = $pendapatanPerKosan;
+            $kosan->kamarDisewakan = $kamarDisewakanPerKosan;
+
+            // Tambahkan ke total pendapatan dan total kamar disewakan
+            $totalPendapatan += $pendapatanPerKosan;
+            $totalKamarDisewakan += $kamarDisewakanPerKosan;
         }
 
-        return view('dashboard.owner', compact('kosans', 'totalKosan', 'totalKamar', 'totalPendapatan', 'kamarDisewakan'));
+        // Kirim data ke view
+        return view('dashboard.owner', compact('kosans', 'totalKosan', 'totalKamar', 'totalPendapatan', 'totalKamarDisewakan'));
     }
+
     public function adminDashboard()
     {
         $totalKosans = Kosan::count();

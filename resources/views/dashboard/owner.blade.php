@@ -6,7 +6,6 @@
         <p class="text-center" style="font-size: 1.1rem;">
             Selamat datang {{ auth()->user()->name }}, di dashboard untuk pengelola kosan Anda.
         </p>
-        
 
         <!-- Statistik -->
         <div class="row text-center mb-5">
@@ -30,7 +29,7 @@
                 <div class="card shadow-sm" style="background-color: #FFF8DC; border-radius: 10px;">
                     <div class="card-body">
                         <h5 style="color: #2C6E49;">Kamar Disewakan</h5>
-                        <h2 style="color: #2C6E49; font-weight: bold;">{{ $kamarDisewakan }}</h2>
+                        <h2 style="color: #2C6E49; font-weight: bold;">{{ $totalKamarDisewakan }}</h2>
                     </div>
                 </div>
             </div>
@@ -62,8 +61,8 @@
                         <tr>
                             <td>{{ $kosan->nama_kosan }}</td>
                             <td>{{ $kosan->kamar_tersedia }}</td>
-                            <td>{{ $kosan->kamar_disewakan ?? 0 }}</td>
-                            <td>{{ number_format($kosan->pendapatan ?? 0, 0, ',', '.') }}</td>
+                            <td>{{ $kosan->kamarDisewakan }}</td>
+                            <td>{{ number_format($kosan->totalPendapatan ?? 0, 0, ',', '.') }}</td>
                             <td>
                                 <a href="{{ route('kosan.edit', $kosan->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('kosan.destroy', $kosan->id) }}" method="POST" class="d-inline">
@@ -75,18 +74,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">Belum ada data kosan.</td>
+                            <td colspan="5" class="text-center">Tidak ada kosan yang ditemukan</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-        </div>
-
-        <!-- Tambahkan Kosan -->
-        <div class="text-center mt-4">
-            <a href="{{ route('kosan.create') }}" class="btn btn-success" style="background-color: #2C6E49; color: #FFF8DC; border-radius: 10px;">
-                Tambahkan Kosan Baru
-            </a>
         </div>
     </div>
 @endsection
