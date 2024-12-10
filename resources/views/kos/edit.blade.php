@@ -8,6 +8,7 @@
             @csrf
             @method('PUT')
 
+            <!-- Formulir untuk data kosan lainnya -->
             <div class="mb-3">
                 <label for="nama_kosan" class="form-label">Nama Kosan:</label>
                 <input type="text" class="form-control" name="nama_kosan" value="{{ $kosan->nama_kosan }}" required>
@@ -51,38 +52,45 @@
             <div class="mb-3">
                 <label for="latitude" class="form-label">Latitude:</label>
                 <input type="text" class="form-control" name="latitude" value="{{ $kosan->latitude }}">
-                @error('latitude')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="longitude" class="form-label">Longitude:</label>
                 <input type="text" class="form-control" name="longitude" value="{{ $kosan->longitude }}">
-                @error('longitude')
+            </div>
+
+            <!-- Menampilkan Foto-foto Kosan -->
+            <div class="mb-3">
+                <label for="photos" class="form-label">Foto Kosan:</label>
+                <div class="row">
+                    @foreach ($kosan->photos as $photo)
+                        <div class="col-md-3">
+                            <div class="card">
+                                <img src="{{ asset('storage/' . $photo->photo_url) }}" class="card-img-top"
+                                    style="height: 200px; object-fit: cover;" alt="Foto Kosan">
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="delete_photo_{{ $photo->id }}"
+                                            name="delete_photos[]" value="{{ $photo->id }}">
+                                        <label class="form-check-label" for="delete_photo_{{ $photo->id }}">Hapus Foto</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Upload Foto Baru -->
+            <div class="mb-3">
+                <label for="photos" class="form-label">Tambahkan Foto Baru:</label>
+                <input type="file" class="form-control" id="photos" name="photos[]" multiple>
+                @error('photos.*')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
-
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <!-- Menampilkan gambar kosan -->
-                    <img src="{{ $kosan->photos->first() ? asset('storage/' . $kosan->photos->first()->photo_url) : asset('images/default-kosan.jpg') }}"
-                        class="card-img-top" alt="Foto Kosan" style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $kosan->nama_kosan }}</h5>
-                        <p class="card-text">
-                            <label for="photos" class="form-label">Tambahkan Foto Baru:</label>
-                            <input type="file" class="form-control" id="photos" name="photos[]" multiple>
-                        </p>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                    </div>
-                </div>
-            </div>
-
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
         </form>
     </div>
 @endsection

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 @section('content')
     <div class="container">
@@ -15,38 +17,51 @@
                         <!-- Foto Kosan -->
                         <div class="mb-4">
                             <h5>Foto Kosan:</h5>
-                            <div class="row">
-                                @forelse ($kosan->photos as $photo)
-                                    <div class="col-md-4 mb-3">
-                                        <img src="{{ asset('storage/' . $photo->photo_url) }}" class="img-fluid rounded"
-                                            alt="Foto Kosan" style="object-fit: cover; height: 150px;">
-                                    </div>
-                                @empty
-                                    <p class="text-muted">Tidak ada foto untuk kosan ini.</p>
-                                @endforelse
+                            <div id="kosanCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @forelse ($kosan->photos as $index => $photo)
+                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                            <img src="{{ asset('storage/' . $photo->photo_url) }}" class="d-block w-100"
+                                                alt="Foto Kosan" style="object-fit: cover; height: 300px;">
+                                        </div>
+                                    @empty
+                                        <p class="text-muted">Tidak ada foto untuk kosan ini.</p>
+                                    @endforelse
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#kosanCarousel"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#kosanCarousel"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                         </div>
+
 
                         <!-- Peta Kosan (Jika ada latitude dan longitude) -->
                         <div class="mb-4">
                             <h5>Lokasi Kosan:</h5>
-                            @if($kosan->latitude && $kosan->longitude)
+                            @if ($kosan->latitude && $kosan->longitude)
                                 <div id="map" style="height: 400px;"></div>
                                 <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
+                                    document.addEventListener('DOMContentLoaded', function() {
                                         // Inisialisasi peta dengan level zoom 15 (lebih besar untuk zoom in lebih dekat)
                                         var map = L.map('map').setView([{{ $kosan->latitude }}, {{ $kosan->longitude }}], 15);
-                        
+
                                         // Menambahkan tile layer OpenStreetMap
                                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                         }).addTo(map);
-                        
+
                                         // Menambahkan marker pada lokasi kosan
                                         L.marker([{{ $kosan->latitude }}, {{ $kosan->longitude }}]).addTo(map)
                                             .bindPopup("{{ $kosan->nama_kosan }}")
                                             .openPopup();
-                        
+
                                         // Menambahkan kontrol zoom untuk memperbesar atau memperkecil
                                         L.control.zoom({
                                             position: 'topright' // Menempatkan kontrol zoom di pojok kanan atas
@@ -57,8 +72,8 @@
                                 <p class="text-muted">Lokasi kosan tidak tersedia.</p>
                             @endif
                         </div>
-                        
-                        
+
+
                     </div>
                     <!-- Bagian Kanan: Detail Kosan -->
                     <div class="col-md-6">
@@ -74,7 +89,7 @@
                         <p><strong>Deskripsi:</strong></p>
                         <p><strong>No Handphone:</strong> {{ $kosan->no_handphone }}</p>
                         <p>{!! nl2br(e($kosan->deskripsi_kosan)) !!}</p>
-                        
+
 
                         <!-- Tombol Pilih Kosan -->
                         @auth
@@ -178,8 +193,7 @@
                             <div class="border p-2 mb-1">
                                 <strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}
                                 @auth
-                                    <button class="btn btn-sm reply-button"
-                                        onclick="toggleReplyForm({{ $comment->id }})"
+                                    <button class="btn btn-sm reply-button" onclick="toggleReplyForm({{ $comment->id }})"
                                         style="color: #2C6E49; background-color: #F3EAC2; border: 1px solid #C7A27C; border-radius: 15px; padding: 2px 10px; font-size: 0.8rem; transition: all 0.3s ease; margin-left: 10px;"
                                         onmouseover="this.style.backgroundColor='#2C6E49'; this.style.color='#FFF8DC'"
                                         onmouseout="this.style.backgroundColor='#F3EAC2'; this.style.color='#2C6E49'">
@@ -239,5 +253,6 @@
             jumlahTransaksiInput.value = jumlahKamarInput.value;
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     @include('layouts.loginalert')
 @endsection
