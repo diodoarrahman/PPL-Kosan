@@ -31,7 +31,7 @@
                         <div class="mb-4">
                             <h5>Lokasi Kosan:</h5>
                             @if($kosan->latitude && $kosan->longitude)
-                                <div id="map" style="height: 400px;"></div>
+                                <div id="map" style="height: 200px;"></div>
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         // Inisialisasi peta dengan level zoom 15 (lebih besar untuk zoom in lebih dekat)
