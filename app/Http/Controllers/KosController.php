@@ -38,11 +38,19 @@ class KosController extends Controller
 
     public function manage()
     {
-        // Ambil kosan yang dimiliki oleh pengguna yang sedang login
-        $kosans = auth()->user()->kosans; // Relasi antara User dan Kosan
+        // Cek apakah pengguna yang sedang login adalah admin
+        if (auth()->user()->role === 'admin') {
+            // Jika admin, ambil semua kosan
+            $kosans = Kosan::all();
+        } else {
+            // Jika bukan admin (misalnya owner), hanya ambil kosan yang dimiliki oleh pengguna yang sedang login
+            $kosans = auth()->user()->kosans; // Relasi antara User dan Kosan
+        }
 
+        // Kirim data kosan ke view
         return view('kos.manage', compact('kosans'));
     }
+
 
     public function show($id)
     {
