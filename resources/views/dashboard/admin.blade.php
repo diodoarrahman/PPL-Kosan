@@ -72,7 +72,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kosans->take(3) as $kosan) <!-- Batasi 3 data -->
+                        @foreach ($kosans->take(3) as $kosan)
+                            <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $kosan->id }}</td>
                                 <td>{{ $kosan->nama_kosan }}</td>
@@ -103,7 +104,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($transactions->take(3) as $transaction) <!-- Batasi 3 data -->
+                        @foreach ($transactions ->take(3) as $transaction)
+                            <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $transaction->id }}</td>
                                 <td>{{ $transaction->user->name }}</td>
@@ -132,7 +134,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($owners->take(3) as $owner) <!-- Batasi 3 data -->
+                        @foreach ($owners->take(3) as $owner)
+                            <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $owner->id }}</td>
                                 <td>{{ $owner->name }}</td>
@@ -164,7 +167,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users->take(3) as $user) <!-- Batasi 3 data -->
+                        @foreach ($users->take(3) as $user)
+                            <!-- Batasi 3 data -->
                             <tr>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
@@ -192,10 +196,12 @@
         var kosanChart = new Chart(ctxKosan, {
             type: 'bar',
             data: {
-                labels: ['Total Kosan', 'Kosans Available', 'Kosans Rented'],  // Example categories
+                labels: ['Total Kosan', 'Kosans Available', 'Kosans Rented'], // Example categories
                 datasets: [{
                     label: 'Kosan Data',
-                    data: [{{ $totalKosans }}, {{ $availableKosans }}, {{ $rentedKosans }}], // Example data
+                    data: [{{ $totalKosans }}, {{ $availableKosans }},
+                        {{ $rentedKosans }}
+                    ], // Example data
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -203,17 +209,48 @@
             }
         });
 
+        // Ambil data transaksi dari server
+        var transactionData = @json($transactionsdata);
+
+        // Siapkan data untuk chart
+        var labels = transactionData.map(function(data) {
+            return data.label; // Label berupa bulan dan tahun
+        });
+
+        var dataCounts = transactionData.map(function(data) {
+            return data.count; // Jumlah transaksi per bulan
+        });
+
+        // Membuat chart dengan data dari server
         var transactionChart = new Chart(ctxTransaction, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April'], // Example months
+                labels: labels, // Menggunakan bulan dan tahun sebagai label
                 datasets: [{
                     label: 'Transactions per Month',
-                    data: [12, 19, 3, 5], // Example data
+                    data: dataCounts, // Data jumlah transaksi
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month',
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Transactions',
+                        },
+                        beginAtZero: true
+                    }
+                }
             }
         });
     </script>

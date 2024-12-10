@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kosan;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 
 class OwnerController extends Controller
 {
@@ -62,6 +63,24 @@ class OwnerController extends Controller
         $totalTransactions = Transaction::count();
         $totalOwners = User::where('role', 'owner')->count();
         $totalUsers = User::count();
+        $transaction = Transaction::all();
+
+        // Mengambil transaksi dan mengelompokkan berdasarkan bulan dan tahun
+        $transactionsPerMonth = Transaction::selectRaw('YEAR(transaction_date) as year, MONTH(transaction_date) as month, COUNT(*) as count')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get(); // Pastikan menggunakan `get()` agar menjadi koleksi Eloquent
+
+        // Menyiapkan data untuk chart
+        $transactionData = $transactionsPerMonth->map(function ($transaction) {
+            // Format bulan dan tahun untuk label
+            $label = Carbon::createFromDate($transaction->year, $transaction->month, 1)->format('F Y');
+            return [
+                'label' => $label,
+                'count' => $transaction->count,
+            ];
+        });
 
         // Kirim data ke view
         return view('dashboard.admin', [
@@ -72,7 +91,8 @@ class OwnerController extends Controller
             'totalOwners' => $totalOwners,
             'totalUsers' => $totalUsers,
             'kosans' => Kosan::all(),
-            'transactions' => Transaction::all(),
+            'transactionsdata' => $transactionData, // Kirim transaksi per bulan ke view
+            'transactions' => $transaction,
             'owners' => User::whereHas('kosans')->get(),
             'users' => User::all(),
         ]);
