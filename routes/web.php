@@ -81,6 +81,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Comment routes (No middleware required)
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 
 // Test route (No middleware required)
 Route::get('/test-route', function () {

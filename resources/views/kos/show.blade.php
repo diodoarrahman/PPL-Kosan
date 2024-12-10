@@ -192,13 +192,28 @@
                         @foreach ($kosan->comments->whereNull('parent_id') as $comment)
                             <div class="border p-2 mb-1">
                                 <strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}
+
                                 @auth
+                                    <!-- Tombol Balas -->
                                     <button class="btn btn-sm reply-button" onclick="toggleReplyForm({{ $comment->id }})"
                                         style="color: #2C6E49; background-color: #F3EAC2; border: 1px solid #C7A27C; border-radius: 15px; padding: 2px 10px; font-size: 0.8rem; transition: all 0.3s ease; margin-left: 10px;"
                                         onmouseover="this.style.backgroundColor='#2C6E49'; this.style.color='#FFF8DC'"
                                         onmouseout="this.style.backgroundColor='#F3EAC2'; this.style.color='#2C6E49'">
                                         <i class="bi bi-reply-fill"></i> Balas
                                     </button>
+
+                                    <!-- Tombol Hapus Komentar (Hanya untuk admin atau pemilik komentar) -->
+                                    @if (Auth::user()->role === 'admin' || Auth::id() === $comment->user_id)
+                                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus komentar ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @endif
                                 @endauth
 
                                 <!-- Form Balasan (Hidden by default) -->
@@ -218,41 +233,55 @@
                                 @foreach ($comment->replies as $reply)
                                     <div class="reply-container ms-3 mt-2 border-start ps-2">
                                         <strong>{{ $reply->user->name }}:</strong> {{ $reply->comment }}
+
+                                        @auth
+                                            <!-- Tombol Hapus Balasan (Hanya untuk admin atau pemilik balasan) -->
+                                            @if (Auth::user()->role === 'admin' || Auth::id() === $reply->user_id)
+                                                <form action="{{ route('comments.destroy', $reply->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus balasan ini?')">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        @endauth
                                     </div>
                                 @endforeach
                             </div>
                         @endforeach
                     </div>
+
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        // Fungsi untuk menampilkan atau menyembunyikan form balasan
-        function toggleReplyForm(commentId) {
-            const replyForm = document.getElementById('replyForm' + commentId);
-            if (replyForm.style.display === 'none' || replyForm.style.display === '') {
-                replyForm.style.display = 'block';
-            } else {
-                replyForm.style.display = 'none';
-            }
-        }
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+            <script>
+                // Fungsi untuk menampilkan atau menyembunyikan form balasan
+                function toggleReplyForm(commentId) {
+                    const replyForm = document.getElementById('replyForm' + commentId);
+                    if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+                        replyForm.style.display = 'block';
+                    } else {
+                        replyForm.style.display = 'none';
+                    }
+                }
 
-        // Menambahkan logika untuk modal
-        const jumlahKamarInput = document.getElementById('jumlah_kamar');
-        const jumlahTransaksiInput = document.getElementById('jumlah_transaksi');
+                // Menambahkan logika untuk modal
+                const jumlahKamarInput = document.getElementById('jumlah_kamar');
+                const jumlahTransaksiInput = document.getElementById('jumlah_transaksi');
 
-        jumlahKamarInput.addEventListener('input', function() {
-            const jumlahKamar = parseInt(jumlahKamarInput.value);
-            const kamarTersedia = {{ $kosan->kamar_tersedia }};
-            if (jumlahKamar > kamarTersedia) {
-                jumlahKamarInput.value = kamarTersedia;
-            }
-            jumlahTransaksiInput.value = jumlahKamarInput.value;
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    @include('layouts.loginalert')
-@endsection
+                jumlahKamarInput.addEventListener('input', function() {
+                    const jumlahKamar = parseInt(jumlahKamarInput.value);
+                    const kamarTersedia = {{ $kosan->kamar_tersedia }};
+                    if (jumlahKamar > kamarTersedia) {
+                        jumlahKamarInput.value = kamarTersedia;
+                    }
+                    jumlahTransaksiInput.value = jumlahKamarInput.value;
+                });
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            @include('layouts.loginalert')
+        @endsection

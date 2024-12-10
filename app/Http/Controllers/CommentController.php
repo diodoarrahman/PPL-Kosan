@@ -25,4 +25,17 @@ class CommentController extends Controller
 
         return back();
     }
+    public function destroy($id)
+    {
+        // Cari komentar atau balasan berdasarkan ID
+        $comment = Comment::findOrFail($id);
+
+        // Pastikan hanya admin atau pemilik komentar yang bisa menghapusnya
+        if (Auth::user()->role === 'admin' || Auth::id() === $comment->user_id) {
+            $comment->delete();  // Hapus komentar atau balasan
+            return redirect()->back()->with('success', 'Komentar atau balasan berhasil dihapus');
+        }
+
+        return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus komentar atau balasan ini.');
+    }
 }
